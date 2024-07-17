@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <limits.h>
+int INF = 1e5;
+void printSolution(int v, int dist[v][v]) {
+    printf("The following matrix shows the shortest distances between every pair of vertices (-1 = infinity):\n");
+    for (int i = 0; i < v; i++) {
+        for (int j = 0; j < v; j++) {
+            if (dist[i][j] == INF)
+                printf("-1 ");
+            else
+                printf("%d ", dist[i][j]);
+        }
+        printf("\n");
+    }
+}
+void floydWarshall(int v, int graph[v][v]) {
+    int dist[v][v], i, j, k;
+    for (i = 0; i < v; i++)
+        for (j = 0; j < v; j++)
+            dist[i][j] = graph[i][j];
+    for (k = 0; k < v; k++) {
+        for (i = 0; i < v; i++) {
+            for (j = 0; j < v; j++) {
+                if (dist[i][k] + dist[k][j] < dist[i][j])
+                    dist[i][j] = dist[i][k] + dist[k][j];
+            }
+        }
+    }
+    printSolution(v, dist);
+}
+int main() {
+    int v;
+    printf("Enter no. of vertices: ");
+    scanf("%d", &v);
+    int graph[v][v];
+    printf("Enter weighted adjacency matrix (Enter -1 for inf): \n");
+    for(int i = 0; i < v; i++){
+        for(int j = 0; j < v; j++){
+            scanf("%d", &graph[i][j]);
+            if (graph[i][j] == -1) graph[i][j] = INF;
+        }
+    } 
+    floydWarshall(v, graph);
+    return 0;
+}
